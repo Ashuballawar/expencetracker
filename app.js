@@ -50,7 +50,7 @@ app.use('/premium',premiumfacilityRouter)
 app.use('/password',forgotpasswordrouter)
 app.use((req,res)=>{
     console.log(req.url)
-    console.log('add more logs')
+    
     res.sendFile(path.join(__dirname,`view/${req.url}`))
 })
 sequelize.sync().then(result=>{
