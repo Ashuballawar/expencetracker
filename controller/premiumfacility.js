@@ -5,11 +5,13 @@ const user=require('../models/userData');
 const sequelize = require('sequelize');
 
 
+
+
+
+
 exports.leaderborad=async(req,res,next)=>{
-    try{
-       
-        
-           
+    try{     
+                
            allUser=await user.findAll({
             attributes:['Name',[sequelize.fn('sum',sequelize.col('expencedata.amount')),'total_cost']],
             include:[
@@ -22,6 +24,8 @@ exports.leaderborad=async(req,res,next)=>{
             group:['id'],
             order:[[sequelize.col('total_cost'),"DESC"]]
              }  );
+
+             
           userExpencewithName=[];
           allUser.forEach(element => {
             userExpencewithName.push(element.dataValues)
