@@ -20,9 +20,9 @@ exports.forgotpassword=async (req,res)=>{
         //     from: 'yj.rocks.2411@gmail.com', // Change to your verified sender
         //     subject: 'Sending with SendGrid is Fun',
         //     text: 'Click on Reset password',
-        //     html: `<a href="http://3.6.170.115:3000/password/resetpassword/${id}">Reset password</a>`,
+        //     html: `<a href="http://localhost:3000/password/resetpassword/${id}">Reset password</a>`,
         // }                                                                                     
-        let response=await res.status(201).json({link:`<a href="http://3.6.170.115:4000/password/resetpassword/${id}">Reset password</a>`})
+        let response=await res.status(201).json({link:`<a href="http://localhost:4000/password/resetpassword/${id}">Reset password</a>`})
              // let response=await sgMail.send(msg)                            
              console.log(response.statusCode)
        //  return res.status(201).json({message: 'Link to reset password sent to your mail ', success:true})

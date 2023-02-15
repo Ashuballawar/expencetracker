@@ -13,21 +13,42 @@
     crossorigin="anonymous"></script>
 </head>
 <body>
-
-    <form  id="loginform" class="container was-validated">
+<div class="form-control" style="
+width: 40%;
+background-color: #1acfb1;
+height: 306px;
+margin: auto;">
+    <form id="loginform" class="form-control container was-validated" style="
+    width: fit-content;
+    background-color: gold;
+    height:175px;
+">
        
-        <label for="Email"  class="form-label">Email</label>
-        <input type="email" id="Email" class="form-control-sm" placeholder="Email" required>
-        <label for="Password"  class="form-label">Password</label>
-        <input type="password" id="Password" class="form-control-sm" placeholder="" required>
-        <input type="submit" id="signUp" value="Login" class="form-submit">
+        <label for="Email">Email</label>
+        <input type="email" id="Email" class="form-control-sm" placeholder="Email" required="" style="
+        margin: 0px 26px;
+    ">
+        <br>
+        <br>
+        <label for="Password" class="form-label">Password</label>
+     
+        <input type="password" id="Password" class="form-control-sm" placeholder="" required="">
+        <br>
+        <br>
+        <input type="submit" id="signUp" value="Login" class="form-control" style="
+    width: auto;
+    float: right;
+    margin: 0px 10px;
+">
        
     </form>
-    <a href="./signup.html">Sign up</a><br><br>
-    <a href="./forgot.html">forgot password</a>
+    <a href="./signup.html" class="form-control" style="width: fit-content;background-color: blue; margin:auto;">Sign up</a><br>
+    <a href="./forgot.html" class="form-control" style="width: fit-content;background-color: pink; margin:auto;">forgot password</a>
+</div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.2/axios.min.js"></script>
-    <script  src="login.js" ></script>
+    <script src="login.js"></script>
 
 
-    </body>
+    
+</body>
 </html>

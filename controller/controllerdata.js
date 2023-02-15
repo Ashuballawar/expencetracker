@@ -47,7 +47,7 @@ exports.getdata=async (req,res,next)=>{
       }
       console.log('pagesize==>',req.query.pagesize)
       if(req.query.pagesize){
-         console.log('jahsjshjdsjhdjkhi')
+         
          n=0+parseInt(req.query.pagesize)
       }
       

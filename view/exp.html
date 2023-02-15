@@ -13,10 +13,10 @@
     <link ref="stylesheet"  href="boot.css";>
 </head>
 <body>
-    <button id="rzp-button1">Buy premium</button>
-    <button id="logout" style="float:right">log out</button>
+    <button id="rzp-button1" class="form-control"  style="width:10%;background-color:blueviolet;">Buy premium</button>
+    <button id="logout" class="form-control" style="float:right;width:10%;background-color: palevioletred;">log out</button>
     <h6 id="premium-user"></h6>
-    <form  id="head" class="container was-validated">
+    <form  id="head" class="container was-validated" >
            <label for="amount" class="form-label">Expence Amount</label>
            <input type="number" id="amount" class="form-control-sm " placeholder="00.00" required >
            <label for="description"  class="form-label">Choose Description</label>
@@ -30,7 +30,11 @@
             <option >Food</option>
             <option >Other</option>
           </select> 
-           <input type="submit" id="submit" value="Submit" class="form-submit">
+         <input type="submit" id="submit" value="Submit" class="form-control" style="
+           width: auto;
+           float: right;
+           margin: 0px 142px 0px 0px;
+       ">
 
         </form>
         <button id="downloadbutton" onclick="download()">downloadFiles</button>
@@ -42,7 +46,10 @@
         </select>
         <ul id="leaderboad-list"></ul>
         
-        <ul id="listOfFile"><h5>List Of File DownLoaded</h5></ul>
+        <ul id="listOfFile" style="
+        background-color: chartreuse;
+        width: max-content;
+    "><h5>List Of File DownLoaded</h5></ul>
         <div id="pagitation">
             <!-- <button id="pagitationPage1">1</button>
             <button id="pagitationPage2">2</button> -->

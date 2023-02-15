@@ -9,7 +9,7 @@ form.addEventListener('submit',async function(e){
         Email:e.target.email.value
     }
   
-    let response=await axios.post('http://3.6.170.115:4000/password/forgotpassword',userDetail)
+    let response=await axios.post('http://localhost:4000/password/forgotpassword',userDetail)
     console.log(response)
    
     document.body.innerHTML=response.data.link

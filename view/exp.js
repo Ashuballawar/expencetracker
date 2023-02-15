@@ -36,7 +36,7 @@ function showleaderboard(){
     e.preventDefault();
     leaderboardList.innerHTML="leaderboardList";
     let token=localStorage.getItem('token')
-    let board=await axios.get("http://3.6.170.115:4000/premium/leaderboard",{headers:{"Authorization":token}})//expenditureData:data,userData:allUser
+    let board=await axios.get("http://localhost:4000/premium/leaderboard",{headers:{"Authorization":token}})//expenditureData:data,userData:allUser
       board.data.forEach(element => {
         if(element){
      leaderboardList.innerHTML+=`<li>Name-${element.Name}-TotalExpence-${element.total_cost}</li>`}
@@ -49,7 +49,7 @@ function showleaderboard(){
 
 async function download(){
   let token=localStorage.getItem('token')
-    let response=await axios.get("http://3.6.170.115:4000/user/download",{headers:{"Authorization":token}})
+    let response=await axios.get("http://localhost:4000/user/download",{headers:{"Authorization":token}})
    console.log(response.data.fileName.fileName)
     if(response.status === 200){
       fileList.innerHTML+=`<li>${response.data.fileName.fileName}</li>`
@@ -63,7 +63,7 @@ document.getElementById('rzp-button1').onclick=async function(e){
   e.preventDefault()
   const token=localStorage.getItem('token')
   
-  const response=await axios.get('http://3.6.170.115:4000/purchase/premiummembership',{headers:{"Authorization":token}})
+  const response=await axios.get('http://localhost:4000/purchase/premiummembership',{headers:{"Authorization":token}})
  
     let options=
     {
@@ -71,7 +71,7 @@ document.getElementById('rzp-button1').onclick=async function(e){
       "order_id":response.data.order.id,
 
       "handler":async function(response){
-        res=await axios.post('http://3.6.170.115:4000/purchase/premiummembership',{        
+        res=await axios.post('http://localhost:4000/purchase/premiummembership',{        
         order_id:options.order_id,
           payment_id:response.razorpay_payment_id
         },{headers:{"Authorization":token}})
@@ -91,7 +91,7 @@ document.getElementById('rzp-button1').onclick=async function(e){
     rzpl.on('payment.failed',async function(response){
       console.log(response)
      
-     let confirmation=await axios.post('http://3.6.170.115:4000/purchase/premiummembershipfailed',{        
+     let confirmation=await axios.post('http://localhost:4000/purchase/premiummembershipfailed',{        
         order_id:options.order_id,
           payment_id:response.razorpay_payment_id
         },{headers:{"Authorization":token}})
@@ -120,7 +120,7 @@ async function localstorage(e){
     try {     
       
     
-      res=await axios.post("http://3.6.170.115:4000/user/addData",expence,{headers:{'Authorization':token}})
+      res=await axios.post("http://localhost:4000/user/addData",expence,{headers:{'Authorization':token}})
         printuser(res.data,res.data.id);
 
 
@@ -181,7 +181,7 @@ async function deleteitem(e){
        // localStorage.removeItem(li.id);
        try {
         let token=localStorage.getItem('token')
-        await axios.delete(`http://3.6.170.115:4000/user/deleteData/${li.id}`,{headers:{'Authorization':token}})
+        await axios.delete(`http://localhost:4000/user/deleteData/${li.id}`,{headers:{'Authorization':token}})
         console.log("deleted successfully")
         ul.removeChild(li);
        } catch (error) {
@@ -202,13 +202,13 @@ ul.addEventListener('click',edititem)
     if(e.target.classList.contains('edit')){
         li=e.target.parentElement;
         try {
-            let res=await axios.get(`http://3.6.170.115:4000/user/getdata/${li.id}`,{headers:{'Authorization':token}})
+            let res=await axios.get(`http://localhost:4000/user/getdata/${li.id}`,{headers:{'Authorization':token}})
             reverse=res.data;
             document.getElementById('amount').value=reverse.amount;
             document.getElementById('description').value=reverse.description;
             document.getElementById('category').value=reverse.category;
             ul.removeChild(li);
-            await axios.delete(`http://3.6.170.115:4000/user/deleteData/${li.id}`,{headers:{'Authorization':token}})
+            await axios.delete(`http://localhost:4000/user/deleteData/${li.id}`,{headers:{'Authorization':token}})
         } catch (err) {
             document.body.innerHTML=document.body.innerHTML+`<h6>something went wrong</h6>`
             console.log(err)
@@ -229,7 +229,7 @@ ul.addEventListener('click',edititem)
             showPremiumUser();
             showleaderboard();
            }
-            res=await axios.get("http://3.6.170.115:4000/user/getdata",{headers:{'Authorization':token}});
+            res=await axios.get("http://localhost:4000/user/getdata",{headers:{'Authorization':token}});
              console.log(res)
                     server=res.data.data;
                console.log(res)
@@ -260,7 +260,7 @@ ul.addEventListener('click',edititem)
             document.getElementById('sizeofpage').value= sizeofpage
            const token=localStorage.getItem('token')
           
-            res=await axios.get(`http://3.6.170.115:4000/user/getdata?pagesize=${sizeofpage}`,{headers:{'Authorization':token}});
+            res=await axios.get(`http://localhost:4000/user/getdata?pagesize=${sizeofpage}`,{headers:{'Authorization':token}});
              console.log(res)
                     server=res.data.data;
                console.log(res)
@@ -338,7 +338,7 @@ async function getProducts(page){
   document.getElementById('sizeofpage').value= sizeofpage
  const token=localStorage.getItem('token')
  
-  let res=await axios.get(`http://3.6.170.115:4000/user/getdata?page=${page}&pagesize=${sizeofpage}`,{headers:{'Authorization':token}})
+  let res=await axios.get(`http://localhost:4000/user/getdata?page=${page}&pagesize=${sizeofpage}`,{headers:{'Authorization':token}})
   fileList.innerHTML="";
   fileList.innerHTML='<h5>downladed Files</h5>'
   res.data.listOfDowloadedfile.forEach(element => {

@@ -9,7 +9,7 @@ async function signup(e){
      }
      console.log(userinfo)
      try{
-     responce=await axios.post("http://3.6.170.115:4000/user/signup",userinfo)
+     responce=await axios.post("http://localhost:4000/user/signup",userinfo)
       if(responce.status===201){
         alert('succesfully created accout')
         window.location.href="./login.html"
