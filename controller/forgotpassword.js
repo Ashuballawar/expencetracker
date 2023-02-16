@@ -47,7 +47,7 @@ exports.resetpassword=async (req,res)=>{
     let forgotpasswordrequest=await forgotpassword.findOne({where:{id:req.params.id,active:true}})
    
     if(forgotpasswordrequest){
-        forgotpasswordrequest.update({ active: false});
+        await forgotpasswordrequest.update({ active: false});
      res.status(200).send(`<html>
                                <form action='/password/updatepassword/${req.params.id}' method="POST">
                                <label for="newpassword">Enter New Password</label>
@@ -57,7 +57,7 @@ exports.resetpassword=async (req,res)=>{
                                </html>
                                <script>
                                function formOnsubmit(e){
-                                e.preventDefault();
+                                     e.preventDefault();
                                 console.log('submitted')}  </script>
                                 </html>
                          `)

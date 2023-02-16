@@ -28,6 +28,7 @@ function isinvalid(a){
 
 exports.addData=async (req,res,next)=>{
    let t=await sequelize.transaction();
+  
    if(isinvalid(req.body.amount)){
       return res.status(400).json({err:' amount is missing'})
    }
@@ -42,19 +43,23 @@ exports.addData=async (req,res,next)=>{
      data=await req.user.createExpencedatum({amount:amount,description:description,category:category},{transaction:t})
 
     UpdatedData=await userData.update({TotalExpence:(parseInt(req.user.TotalExpence)||0)+parseInt(amount)},{where:{id:req.user.id},transaction:t})
-     t.commit();
+     await t.commit();
     res.status(201).json(data)
      console.log('successfully AddData') 
       }
      
      
       catch(err){
-         t.rollback();
+         await t.rollback();
         console.log(err)
         res.status(500).json({error:err})
        }
 }
     
+
+
+
+
 exports.getdata=async (req,res,next)=>{
    try{
       let page=1
@@ -93,17 +98,27 @@ exports.getdata=async (req,res,next)=>{
    }
 }
 
+
+
+
+
+
 exports.deleteData=async (req,res,next)=>{
-   try{    
+   let t=await sequelize.transaction();   
+  
+   try{ 
+
+   
     if(!req.params.id){
         res.status(400).json({error:'wrong id'})
     }
-    deletedData=await req.user.getExpencedata({where:{id:req.params.id}})
+    deletedData=await req.user.getExpencedata({where:{id:req.params.id},transaction:t})
     
-    data=await expencedata.destroy({where:{id:req.params.id,userdatumId:req.user.id}})
+    data=await expencedata.destroy({where:{id:req.params.id,userdatumId:req.user.id},transaction:t})
 
-    UpdatedData=await userData.update({TotalExpence:(parseInt(req.user.TotalExpence))-parseInt(deletedData[0].dataValues.amount)},{where:{id:req.user.id}})
+    UpdatedData=await userData.update({TotalExpence:(parseInt(req.user.TotalExpence))-parseInt(deletedData[0].dataValues.amount)},{where:{id:req.user.id},transaction:t})
      if(data===1){
+      await t.commit()
       console.log('successfully deleted') 
       res.status(200).json(data) 
      }
@@ -114,9 +129,14 @@ exports.deleteData=async (req,res,next)=>{
    }}
    catch(err){
     console.log(err)
+    await t.rollback();
     res.status(500).json({error:err})
    }
 }
+
+
+
+
 
 exports.getDatabyId=async (req,res,next)=>{
    try{
@@ -132,7 +152,10 @@ exports.getDatabyId=async (req,res,next)=>{
     res.status(500).json({error:err})
    }
 }
-    
+   
+
+
+
 exports.downloadexpence=async (req,res)=>{
    try{
       const expenceData=await UserService.getExpences(req)
