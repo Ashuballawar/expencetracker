@@ -21,7 +21,10 @@ const userData=sequelize.define('userdata',{
         type:Sequelize.STRING,
         allowNull:false,
     },
-    ispremiuruser:Sequelize.BOOLEAN
+    ispremiuruser:Sequelize.BOOLEAN,
+    TotalExpence:{
+        type:Sequelize.INTEGER
+    }
 
 })
 

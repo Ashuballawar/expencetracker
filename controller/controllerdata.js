@@ -1,19 +1,33 @@
-const expencedata=require('../models/data')
+
 const jwt=require('jsonwebtoken')
 const AWS=require('aws-sdk')
+
+const sequelize=require('../data/database')
+
+const expencedata=require('../models/data')
 const user=require('../models/userData');
+const fileList=require('../models/filelist');
+const userData=require('../models/userData')
+
+
 const UserService=require('../services/userservices')
 const uploadtos3=require('../services/s3services')
-const fileList=require('../models/filelist');
+
+
+
 const { NULL } = require('mysql2/lib/constants/types');
+
+
 function isinvalid(a){
    if(a===undefined||a.length===0){
       return true;
    }
    return false;
 }
+
+
 exports.addData=async (req,res,next)=>{
-   
+   let t=await sequelize.transaction();
    if(isinvalid(req.body.amount)){
       return res.status(400).json({err:' amount is missing'})
    }
@@ -25,13 +39,17 @@ exports.addData=async (req,res,next)=>{
         const description=req.body.description
         const category=req.body.category   
       
-     data=await req.user.createExpencedatum({amount:amount,description:description,category:category})
-     res.status(201).json(data)
+     data=await req.user.createExpencedatum({amount:amount,description:description,category:category},{transaction:t})
+
+    UpdatedData=await userData.update({TotalExpence:(parseInt(req.user.TotalExpence)||0)+parseInt(amount)},{where:{id:req.user.id},transaction:t})
+     t.commit();
+    res.status(201).json(data)
      console.log('successfully AddData') 
       }
      
      
       catch(err){
+         t.rollback();
         console.log(err)
         res.status(500).json({error:err})
        }
@@ -80,7 +98,11 @@ exports.deleteData=async (req,res,next)=>{
     if(!req.params.id){
         res.status(400).json({error:'wrong id'})
     }
+    deletedData=await req.user.getExpencedata({where:{id:req.params.id}})
+    
     data=await expencedata.destroy({where:{id:req.params.id,userdatumId:req.user.id}})
+
+    UpdatedData=await userData.update({TotalExpence:(parseInt(req.user.TotalExpence))-parseInt(deletedData[0].dataValues.amount)},{where:{id:req.user.id}})
      if(data===1){
       console.log('successfully deleted') 
       res.status(200).json(data) 
