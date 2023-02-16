@@ -10,10 +10,14 @@ let token=localStorage.getItem('token')
 form.addEventListener('submit',localstorage);
 let leaderboardList=document.getElementById('leaderboad-list')
 
+
+
 function showPremiumUser(){
   document.getElementById('rzp-button1').style.visibility='hidden'
   document.getElementById('premium-user').innerHTML='You are premium User'
 }
+
+
 
 function parseJwt (token) {
   var base64Url = token.split('.')[1];
@@ -47,6 +51,8 @@ function showleaderboard(){
 
 }
 
+
+
 async function download(){
   let token=localStorage.getItem('token')
     let response=await axios.get("http://localhost:4000/user/download",{headers:{"Authorization":token}})
@@ -58,6 +64,8 @@ async function download(){
       a.download = 'myexpense.csv';
       a.click();
 }}
+
+
 
 document.getElementById('rzp-button1').onclick=async function(e){
   e.preventDefault()
@@ -136,6 +144,8 @@ async function localstorage(e){
     }
     
 
+
+
 async function printuser(expence,m){
     document.getElementById('amount').value="";
     document.getElementById('description').value="";
@@ -171,6 +181,11 @@ async function printuser(expence,m){
  li.appendChild(edit); 
  ul.appendChild(li);
 }
+
+
+
+
+
 ul.addEventListener('click',deleteitem);
 
 //deleting item
@@ -215,6 +230,9 @@ ul.addEventListener('click',edititem)
         }        
     }}
     
+
+
+
     let fileList=document.getElementById('listOfFile')
     window.addEventListener('DOMContentLoaded',reload);
     async function reload(e){
@@ -246,6 +264,9 @@ ul.addEventListener('click',edititem)
        
        
     }
+
+
+
 
 
 
@@ -281,10 +302,12 @@ ul.addEventListener('click',edititem)
                    } catch (error) {
             document.body.innerHTML=document.body.innerHTML+`<h6>something went wrong</h6>`
             console.log(error)
-        }  
-       
+        }        
        
     }
+
+
+
 
    
   document.getElementById('sizeofpage').addEventListener('change',(e)=>{
@@ -293,7 +316,9 @@ ul.addEventListener('click',edititem)
     reload1(e);
   })
    
-   
+  
+  
+
 function printButton(res){
   let pagitationbutton=document.getElementById('pagitation')
   pagitationbutton.innerHTML="";
@@ -330,7 +355,9 @@ function printButton(res){
 
 
   }
-     
+  
+  
+
 async function getProducts(page){
 
   try{
@@ -350,6 +377,8 @@ catch(err){
      console.log(err)
 }}
  
+
+
 
    document.getElementById('logout').onclick=function(e){
     alert('logout successful')
