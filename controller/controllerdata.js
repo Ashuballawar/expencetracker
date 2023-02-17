@@ -74,14 +74,14 @@ exports.getdata=async (req,res,next)=>{
          n=0+parseInt(req.query.pagesize)
       }
       
-      console.log(req.query.page)
+      
        
         console.log("pagesize====>",n)
         data=await expencedata.findAll({where:{userdatumId:req.user.id}})
         let totalFile=await req.user.countFileLists();
         let listOfDowloadedfile=await req.user.getFileLists({ offset:(page-1)*n, limit: n });   
          console.log(totalFile)
-         console.log(page)
+        
         console.log('successfully sendData') 
          currentPage=page
           hasNextPage=n*page<totalFile
