@@ -3,8 +3,8 @@ const helmet=require('helmet');
 const morgan=require('morgan');
 const fs=require('fs');
 const path=require('path')
-
-
+var cors = require('cors')
+const bodyParser=require('body-parser')
 
 const sequelize=require('./data/database')
 
@@ -19,12 +19,6 @@ const fileList=require('./models/filelist')
 const app=express();
 
 
-
-const bodyParser=require('body-parser')
-
-
-
-
 const expenceDataRouter=require('./routes/expencedata')
 const signupUserDataRouter=require('./routes/postUserData')
 const loginUserRouter=require('./routes/login')
@@ -34,13 +28,8 @@ const forgotpasswordrouter=require('./routes/forgetpassword')
 
 
 
-
-
-
 const accessLogStream=fs.createWriteStream(path.join(__dirname,'access.log'),{flags:'a'});
 
-
-var cors = require('cors')
 app.use(cors());
 //app.use(helmet());
 app.use(morgan('combined',{stream:accessLogStream}))
