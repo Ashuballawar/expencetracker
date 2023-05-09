@@ -12,7 +12,7 @@ async function login(e){
     }
 
     try{
-  response=await axios.post("http://3.6.170.115:4000/user/login",User)
+  response=await axios.post("http://localhost:3000/user/login",User)
   console.log(response)
  
    if(response.status==201){

@@ -1,6 +1,7 @@
 const Razorpay=require('razorpay');
 const Order = require('../models/orders');
 const jwt=require('jsonwebtoken')
+const User=require('../models/userData')
 require('dotenv').config()
 
 function generateAccessToken(Id,Name,ispremiuruser){
@@ -18,7 +19,7 @@ exports.purchasepremium=async (req,res,next)=>{
            if(err){
             throw new Error(err)
            }
-           req.user.createOrder({orderid:order.id,status:'PENDING'})
+          Order.create({orderid:order.id,status:'PENDING',userId:req.user._id})
            .then(()=>{
           return res.status(201).json({order,key_id:rzp.key_id}) })
          .catch(err=>{
@@ -29,6 +30,7 @@ exports.purchasepremium=async (req,res,next)=>{
    }
    catch(err){
     console.log(err)
+   
            res.status(500).json({msg:err})
    }
 }
@@ -36,9 +38,9 @@ exports.purchasepremium=async (req,res,next)=>{
 exports.updateTransactionStatus=async (req,res,next)=>{
     try{
      const {payment_id,order_id}=req.body
-        const order= await Order.findOne({where:{orderid:order_id}})
-        promise1=await order.update({paymentid:payment_id,status:"SUCCESSFULL"})
-        promise2=await req.user.update({ ispremiuruser:true})
+        const order= await Order.findOne({orderid:order_id})
+        promise1=await order.updateOne({paymentid:payment_id,status:"SUCCESSFULL"})
+        promise2=await User.updateOne({ ispremiuruser:true,userId:req.user._id})
         Promise.all([promise1,promise2]).then(()=>{
             return res.status(202).json({success:true,message:"Transaction Successfull",token:generateAccessToken(req.user.id,req.user.Name,true)})
         }).catch((err)=>{
@@ -47,6 +49,7 @@ exports.updateTransactionStatus=async (req,res,next)=>{
    
     }
     catch(err){
+        console.log(err)
         res.status(500).json({msg:err})
     }
 }
@@ -54,9 +57,9 @@ exports.updateTransactionStatus=async (req,res,next)=>{
 exports.updateTransactionfailed=async (req,res,next)=>{
     try{
         const {payment_id,order_id}=req.body
-           const order= await Order.findOne({where:{orderid:order_id}})
-           promise1=await order.update({paymentid:payment_id,status:"Failed"})
-           promise2=await req.user.update({ ispremiuruser:false})
+           const order= await Order.findOne({orderid:order_id})
+           promise1=await order.updateOne({paymentid:payment_id,status:"Failed"})
+           promise2=await User.updateOne({ ispremiuruser:false,userId:req.user._id})
            Promise.all([promise1,promise2]).then(()=>{
                return res.status(202).json({success:true,message:"Transaction Failed"})
            }).catch((err)=>{
@@ -65,6 +68,7 @@ exports.updateTransactionfailed=async (req,res,next)=>{
       
        }
        catch(err){
+        console.log(err)
            res.status(500).json({msg:err})
        }
    }

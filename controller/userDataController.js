@@ -14,6 +14,7 @@ exports.adduserdata=async (req,res,next)=>{
         const Name=req.body.Name
         const Email=req.body.Email
         const Password=req.body.Password
+        console.log(req.body)
        if(isinvalid(Name)||isinvalid(Email)||isinvalid(Password)){
         return res.status(400).json({err:' Something is missing'})
        }
@@ -46,12 +47,13 @@ function generateAccessToken(Id,Name,ispremiuruser){
 exports.userlogin=async (req,res,next)=>{
     const Email=req.body.Email
     const Password=req.body.Password
+    console.log(req.body)
     if(isinvalid(Email)||isinvalid(Password)){
         return res.status(400).json({err:' Something is missing'})
        }
    
     try{
-    user=await userData.findAll({where:{Email:Email}})
+    user=await userData.find({'Email':Email})
     console.log(user[0])
     if(user[0]){
         bcrypt.compare(Password,user[0].Password,(err,result)=>{

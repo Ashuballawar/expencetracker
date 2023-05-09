@@ -13,7 +13,7 @@ document.getElementById('leaderboard').onclick=async function(e){
         e.preventDefault();
         leaderboardList.innerHTML="";
         let token=localStorage.getItem('token')
-        let board=await axios.get("http://3.6.170.115:4000/premium/leaderboard")//expenditureData:data,userData:allUser
+        let board=await axios.get("http://localhost:3000/premium/leaderboard")//expenditureData:data,userData:allUser
           board.data.forEach(element => {
             if(element){
          leaderboardList.innerHTML+=`<li>Name-${element.Name}-TotalExpence-${element.Expence}</li>`}
@@ -25,7 +25,7 @@ document.getElementById('leaderboard').onclick=async function(e){
 // document.getElementById('rzp-button1').onclick=async function(e){
 //   const token=localStorage.getItem('token')
   
-//   const response=await axios.get('http://3.6.170.115:4000/purchase/premiummembership',{headers:{"Authorization":token}})
+//   const response=await axios.get('http://localhost:3000/purchase/premiummembership',{headers:{"Authorization":token}})
 //     console.log(response.data.order_id);
 
 //     let options=
@@ -34,7 +34,7 @@ document.getElementById('leaderboard').onclick=async function(e){
 //       "order_id":response.data.order.id,
 
 //       "handler":async function(response){
-//         await axios.post('http://3.6.170.115:4000/purchase/premiummembership',{        
+//         await axios.post('http://localhost:3000/purchase/premiummembership',{        
 //         order_id:options.order_id,
 //           payment_id:response.razorpay_payment_id
 //         },{headers:{"Authorization":token}})
@@ -75,7 +75,7 @@ async function localstorage(e){
     try {     
       
        let token=localStorage.getItem('token')
-      res=await axios.post("http://3.6.170.115:4000/addData",expence,{headers:{'Authorization':token}})
+      res=await axios.post("http://localhost:3000/addData",expence,{headers:{'Authorization':token}})
         printuser(res.data,res.data.id);
 
 
@@ -136,7 +136,7 @@ async function deleteitem(e){
        // localStorage.removeItem(li.id);
        try {
         let token=localStorage.getItem('token')
-        await axios.delete(`http://3.6.170.115:4000/deleteData/${li.id}`,{headers:{'Authorization':token}})
+        await axios.delete(`http://localhost:3000/deleteData/${li.id}`,{headers:{'Authorization':token}})
         console.log("deleted successfully")
         ul.removeChild(li);
        } catch (error) {
@@ -157,13 +157,13 @@ ul.addEventListener('click',edititem)
     if(e.target.classList.contains('edit')){
         li=e.target.parentElement;
         try {
-            let res=await axios.get(`http://3.6.170.115:4000/getdata/${li.id}`,{headers:{'Authorization':token}})
+            let res=await axios.get(`http://localhost:3000/getdata/${li.id}`,{headers:{'Authorization':token}})
             reverse=res.data;
             document.getElementById('amount').value=reverse.amount;
             document.getElementById('description').value=reverse.description;
             document.getElementById('category').value=reverse.category;
             ul.removeChild(li);
-            await axios.delete(`http://3.6.170.115:4000/deleteData/${li.id}`,{headers:{'Authorization':token}})
+            await axios.delete(`http://localhost:3000/deleteData/${li.id}`,{headers:{'Authorization':token}})
         } catch (err) {
             document.body.innerHTML=document.body.innerHTML+`<h6>something went wrong</h6>`
             console.log(err)
@@ -177,7 +177,7 @@ ul.addEventListener('click',edititem)
         try {
 
            const token=localStorage.getItem('token')
-            res=await axios.get("http://3.6.170.115:4000/getdata",{headers:{'Authorization':token}});
+            res=await axios.get("http://localhost:3000/getdata",{headers:{'Authorization':token}});
              
                     server=res.data;
            

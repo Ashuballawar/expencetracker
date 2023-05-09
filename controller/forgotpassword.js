@@ -10,10 +10,10 @@ const { reset } = require('nodemon');
 
 exports.forgotpassword=async (req,res)=>{
     try{
-       let user=await User.findOne({where:{Email:req.body.Email}})
+       let user=await User.findOne({Email:req.body.Email})
        if(user){
         const id=uuid.v4(); 
-        await user.createForgotpassword({id,active:true})  
+        await forgotpassword.create({_id:id,active:true,userId:user._id})  
         // sgMail.setApiKey(process.env.SENGRID_API_KEY)
         // const msg = {
         //     to: email, // Change to your recipient
@@ -22,7 +22,7 @@ exports.forgotpassword=async (req,res)=>{
         //     text: 'Click on Reset password',
         //     html: `<a href="http://3.6.170.115:3000/password/resetpassword/${id}">Reset password</a>`,
         // }                                                                                     
-        let response=await res.status(201).json({link:`<a href="http://3.6.170.115:4000/password/resetpassword/${id}">Reset password</a>`})
+        let response=await res.status(201).json({link:`<a href="http://localhost:3000/password/resetpassword/${id}">Reset password</a>`})
              // let response=await sgMail.send(msg)                            
              console.log(response.statusCode)
        //  return res.status(201).json({message: 'Link to reset password sent to your mail ', success:true})
@@ -44,10 +44,10 @@ exports.resetpassword=async (req,res)=>{
     console.log(1)
   try{ 
      if(req.params.id){
-    let forgotpasswordrequest=await forgotpassword.findOne({where:{id:req.params.id,active:true}})
+    let forgotpasswordrequest=await forgotpassword.findOne({_id:req.params.id,active:true})
    
     if(forgotpasswordrequest){
-        forgotpasswordrequest.update({ active: false});
+         forgotpassword.updateOne({_id:req.params.id},{$set:{ active: false}});
      res.status(200).send(`<html>
                                <form action='/password/updatepassword/${req.params.id}' method="POST">
                                <label for="newpassword">Enter New Password</label>
@@ -81,13 +81,21 @@ exports.updatepassword=async (req,res)=>{
     let newpassword=req.body.newpassword
           let id=req.params.id
 
-let resetpasswordrequest=await forgotpassword.findOne({where:{id:id}})
-     let user=await User.findOne({where:{id:resetpasswordrequest.userdatumId}})
+let resetpasswordrequest=await forgotpassword.findOne({_id:id})
+     let user=await User.findOne({_id:resetpasswordrequest.userId})
     if(user){
         bcrypt.hash(newpassword,10,async(err,hash)=>{
-            console.log(err)
-            data=await user.update({Password:hash})
-            res.status(201).json({message:'success'})
+           if(err){ 
+            throw new Error(err)
+           }
+            data=await User.updateOne({_id:user._id},{$set:{Password:hash}})
+            res.status(201).send(`<html>
+           <script> alert('password succefully set')
+           window.location.href='http://localhost:3000/login.html'
+           </script>
+          
+            </html>`
+            )
            
     })}}
     catch(err){

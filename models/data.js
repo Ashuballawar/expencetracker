@@ -1,26 +1,29 @@
-const Sequelize=require('sequelize');
-const sequelize=require('../data/database')
+const mongoose=require('mongoose')
+const validator=require('validator')
+const Schema=mongoose.Schema;
+const dataSchema=new Schema({
+   
+amount:{
+    type:Number,
+    required:true
+},
+description:{
+    type:String,
+    allowNull:false,
+},
+category:{
+    type:String,
+    required:true
+},
+userId:{
+    type:Schema.Types.ObjectId,
+    ref:'User',
+    required:true
+}
 
-const expencedata=sequelize.define('expencedata',{
-    id:{
-        type:Sequelize.INTEGER,
-        autoIncrement:true,
-        allowNull:false,
-        primaryKey:true
-    },
-    amount:{
-        type:Sequelize.DOUBLE,
-        allowNull:false,
-        
-    },
-    description:{
-        type:Sequelize.STRING,
-        allowNull:false,
-    },
-    category:{
-        type:Sequelize.STRING,
-        allowNull:false,
-    }
+
+
 })
 
-module.exports=expencedata
+
+module.exports=mongoose.model('Data',dataSchema)

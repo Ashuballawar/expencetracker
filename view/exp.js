@@ -36,10 +36,10 @@ function showleaderboard(){
     e.preventDefault();
     leaderboardList.innerHTML="leaderboardList";
     let token=localStorage.getItem('token')
-    let board=await axios.get("http://3.6.170.115:4000/premium/leaderboard",{headers:{"Authorization":token}})//expenditureData:data,userData:allUser
+    let board=await axios.get("http://localhost:3000/premium/leaderboard",{headers:{"Authorization":token}})//expenditureData:data,userData:allUser
       board.data.forEach(element => {
         if(element){
-     leaderboardList.innerHTML+=`<li>Name-${element.Name}-TotalExpence-${element.total_cost}</li>`}
+     leaderboardList.innerHTML+=`<li>Name-${element.Name}-TotalExpence-${element.TotalCost}</li>`}
      });
    
 
@@ -49,7 +49,7 @@ function showleaderboard(){
 
 async function download(){
   let token=localStorage.getItem('token')
-    let response=await axios.get("http://3.6.170.115:4000/user/download",{headers:{"Authorization":token}})
+    let response=await axios.get("http://localhost:3000/user/download",{headers:{"Authorization":token}})
    console.log(response.data.fileName.fileName)
     if(response.status === 200){
       fileList.innerHTML+=`<li>${response.data.fileName.fileName}</li>`
@@ -63,7 +63,7 @@ document.getElementById('rzp-button1').onclick=async function(e){
   e.preventDefault()
   const token=localStorage.getItem('token')
   
-  const response=await axios.get('http://3.6.170.115:4000/purchase/premiummembership',{headers:{"Authorization":token}})
+  const response=await axios.get('http://localhost:3000/purchase/premiummembership',{headers:{"Authorization":token}})
  
     let options=
     {
@@ -71,7 +71,7 @@ document.getElementById('rzp-button1').onclick=async function(e){
       "order_id":response.data.order.id,
 
       "handler":async function(response){
-        res=await axios.post('http://3.6.170.115:4000/purchase/premiummembership',{        
+        res=await axios.post('http://localhost:3000/purchase/premiummembership',{        
         order_id:options.order_id,
           payment_id:response.razorpay_payment_id
         },{headers:{"Authorization":token}})
@@ -91,7 +91,7 @@ document.getElementById('rzp-button1').onclick=async function(e){
     rzpl.on('payment.failed',async function(response){
       console.log(response)
      
-     let confirmation=await axios.post('http://3.6.170.115:4000/purchase/premiummembershipfailed',{        
+     let confirmation=await axios.post('http://localhost:3000/purchase/premiummembershipfailed',{        
         order_id:options.order_id,
           payment_id:response.razorpay_payment_id
         },{headers:{"Authorization":token}})
@@ -104,6 +104,7 @@ document.getElementById('rzp-button1').onclick=async function(e){
 
 async function localstorage(e){
     e.preventDefault(); 
+    console.log('hissb')
     let expence={
         amount:e.target.amount.value,
         description:e.target.description.value,
@@ -112,6 +113,7 @@ async function localstorage(e){
        
        
     }
+    console.log(expence)
     if(expence.category=='Select'){
         alert('plz choose categery')
       }
@@ -120,8 +122,9 @@ async function localstorage(e){
     try {     
       
     
-      res=await axios.post("http://3.6.170.115:4000/user/addData",expence,{headers:{'Authorization':token}})
-        printuser(res.data,res.data.id);
+      res=await axios.post("http://localhost:3000/user/addData",expence,{headers:{'Authorization':token}})
+      console.log('res=====>',res)
+      printuser(res.data,res.data._id);
 
 
    } catch (err) {
@@ -181,7 +184,7 @@ async function deleteitem(e){
        // localStorage.removeItem(li.id);
        try {
         let token=localStorage.getItem('token')
-        await axios.delete(`http://3.6.170.115:4000/user/deleteData/${li.id}`,{headers:{'Authorization':token}})
+        await axios.delete(`http://localhost:3000/user/deleteData/${li.id}`,{headers:{'Authorization':token}})
         console.log("deleted successfully")
         ul.removeChild(li);
        } catch (error) {
@@ -202,13 +205,13 @@ ul.addEventListener('click',edititem)
     if(e.target.classList.contains('edit')){
         li=e.target.parentElement;
         try {
-            let res=await axios.get(`http://3.6.170.115:4000/user/getdata/${li.id}`,{headers:{'Authorization':token}})
+            let res=await axios.get(`http://localhost:3000/user/getdata/${li.id}`,{headers:{'Authorization':token}})
             reverse=res.data;
             document.getElementById('amount').value=reverse.amount;
             document.getElementById('description').value=reverse.description;
             document.getElementById('category').value=reverse.category;
             ul.removeChild(li);
-            await axios.delete(`http://3.6.170.115:4000/user/deleteData/${li.id}`,{headers:{'Authorization':token}})
+            await axios.delete(`http://localhost:3000/user/deleteData/${li.id}`,{headers:{'Authorization':token}})
         } catch (err) {
             document.body.innerHTML=document.body.innerHTML+`<h6>something went wrong</h6>`
             console.log(err)
@@ -229,19 +232,20 @@ ul.addEventListener('click',edititem)
             showPremiumUser();
             showleaderboard();
            }
-            res=await axios.get("http://3.6.170.115:4000/user/getdata",{headers:{'Authorization':token}});
+            res=await axios.get("http://localhost:3000/user/getdata",{headers:{'Authorization':token}});
              console.log(res)
                     server=res.data.data;
                console.log(res)
             server.forEach(element => {
               
-                  printuser(element,element.id);
+                  printuser(element,element._id);
             })   
             
             
         } catch (error) {
-            document.body.innerHTML=document.body.innerHTML+`<h6>something went wrong</h6>`
-            console.log(error)
+          console.log(error)
+            // document.body.innerHTML=document.body.innerHTML+`<h6>No data found</h6>`
+            
         }  
        
        
@@ -260,8 +264,9 @@ ul.addEventListener('click',edititem)
             document.getElementById('sizeofpage').value= sizeofpage
            const token=localStorage.getItem('token')
           
-            res=await axios.get(`http://3.6.170.115:4000/user/getdata?pagesize=${sizeofpage}`,{headers:{'Authorization':token}});
-             console.log(res)
+            res=await axios.get(`http://localhost:3000/user/getdata?pagesize=${sizeofpage}`,{headers:{'Authorization':token}});
+           
+            
                     server=res.data.data;
                console.log(res)
            
@@ -279,8 +284,13 @@ ul.addEventListener('click',edititem)
                
              
                    } catch (error) {
-            document.body.innerHTML=document.body.innerHTML+`<h6>something went wrong</h6>`
-            console.log(error)
+                    if(error.response.status==404){
+                      console.log(error)
+                      // document.body.innerHTML=document.body.innerHTML+`<h6>no data found</h6>`
+                    }
+                    else{
+            // document.body.innerHTML=document.body.innerHTML+`<h6>something went wrong</h6>`
+            console.log(error.response.status)}
         }  
        
        
@@ -338,7 +348,9 @@ async function getProducts(page){
   document.getElementById('sizeofpage').value= sizeofpage
  const token=localStorage.getItem('token')
  
-  let res=await axios.get(`http://3.6.170.115:4000/user/getdata?page=${page}&pagesize=${sizeofpage}`,{headers:{'Authorization':token}})
+  let res=await axios.get(`http://localhost:3000/user/getdata?page=${page}&pagesize=${sizeofpage}`,{headers:{'Authorization':token}})
+  console.log('=====>',res)
+  if(res.status==200){
   fileList.innerHTML="";
   fileList.innerHTML='<h5>downladed Files</h5>'
   res.data.listOfDowloadedfile.forEach(element => {
@@ -346,12 +358,19 @@ async function getProducts(page){
             printButton(res)       
                        });
 }
+else if(res.status==404){
+  console.log('hi')
+  fileList.innerHTML+='no file downloaded'
+
+}
+}
 catch(err){
-     console.log(err)
+     console.log('===>',err.response.status)
 }}
  
 
    document.getElementById('logout').onclick=function(e){
+   e.preventDefault()
     alert('logout successful')
    
     window.location.href="./login.html"

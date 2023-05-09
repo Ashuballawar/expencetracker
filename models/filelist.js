@@ -1,14 +1,19 @@
-const Sequelize=require('sequelize');
-const sequelize=require('../data/database')
-
-const fileList=sequelize.define('fileList',{
-    id:{
-        type:Sequelize.INTEGER,
-        autoIncrement:true,
-        allowNull:false,
-        primaryKey:true
+const mongoose=require('mongoose')
+const validator=require('validator')
+const Schema=mongoose.Schema;
+const filelistSchema=new Schema({
+    fileName:{
+        type:String,
+        required:true
     },
-   fileName:Sequelize.STRING
+    userId:{
+        type:Schema.Types.ObjectId,
+        ref:'User',
+        required:true
+    }
+
+
 })
 
-module.exports=fileList
+
+module.exports=mongoose.model('Filelist',filelistSchema)

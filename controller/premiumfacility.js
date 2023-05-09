@@ -1,30 +1,23 @@
 const expencedata=require('../models/data')
 const jwt=require('jsonwebtoken')
-
+const Data=require('../models/data');
 const user=require('../models/userData');
 const sequelize = require('sequelize');
 
 
 exports.leaderborad=async(req,res,next)=>{
     try{
-       
-        
-           
-           allUser=await user.findAll({
-            attributes:['Name',[sequelize.fn('sum',sequelize.col('expencedata.amount')),'total_cost']],
-            include:[
-                {
-                    model:expencedata,
-                    attributes:[]
-                }
-            ],
-
-            group:['id'],
-            order:[[sequelize.col('total_cost'),"DESC"]]
-             }  );
+         
+       let data=await user.find().sort({'TotalCost':-1})
+       console.log(data)
+         
           userExpencewithName=[];
-          allUser.forEach(element => {
-            userExpencewithName.push(element.dataValues)
+          data.forEach(element => {
+              
+            if(element.Email==req.user.Email){
+              element.Name='You'
+            }
+            userExpencewithName.push(element)
           });
           res.status(200).json(userExpencewithName)
        
