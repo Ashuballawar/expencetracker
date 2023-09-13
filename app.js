@@ -1,10 +1,14 @@
+const fs=require('fs');
+const path=require('path')
+
+
 const express=require('express');
 const helmet=require('helmet');
 const morgan=require('morgan');
-const fs=require('fs');
-const path=require('path')
 var cors = require('cors')
 const bodyParser=require('body-parser')
+
+
 
 const sequelize=require('./data/database')
 

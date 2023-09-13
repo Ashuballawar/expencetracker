@@ -42,7 +42,7 @@ exports.addData=async (req,res,next)=>{
       
      data=await req.user.createExpencedatum({amount:amount,description:description,category:category},{transaction:t})
 
-    UpdatedData=await userData.update({TotalExpence:(parseInt(req.user.TotalExpence)||0)+parseInt(amount)},{where:{id:req.user.id},transaction:t})
+    UpdatedData=await userData.update({TotalExpence:(Number(req.user.TotalExpence)||0)+Number(amount)},{where:{id:req.user.id},transaction:t})
      await t.commit();
     res.status(201).json(data)
      console.log('successfully AddData') 
@@ -71,7 +71,7 @@ exports.getdata=async (req,res,next)=>{
       console.log('pagesize==>',req.query.pagesize)
       if(req.query.pagesize){
          
-         n=0+parseInt(req.query.pagesize)
+         n=parseInt(req.query.pagesize)
       }
       
       
@@ -79,9 +79,13 @@ exports.getdata=async (req,res,next)=>{
         console.log("pagesize====>",n)
         data=await expencedata.findAll({where:{userdatumId:req.user.id}})
         let totalFile=await req.user.countFileLists();
+
+
         let listOfDowloadedfile=await req.user.getFileLists({ offset:(page-1)*n, limit: n });   
          console.log(totalFile)
         
+
+
         console.log('successfully sendData') 
          currentPage=page
           hasNextPage=n*page<totalFile
@@ -116,7 +120,7 @@ exports.deleteData=async (req,res,next)=>{
     
     data=await expencedata.destroy({where:{id:req.params.id,userdatumId:req.user.id},transaction:t})
 
-    UpdatedData=await userData.update({TotalExpence:(parseInt(req.user.TotalExpence))-parseInt(deletedData[0].dataValues.amount)},{where:{id:req.user.id},transaction:t})
+    UpdatedData=await userData.update({TotalExpence:(Number(req.user.TotalExpence))-Number(deletedData[0].dataValues.amount)},{where:{id:req.user.id},transaction:t})
      if(data===1){
       await t.commit()
       console.log('successfully deleted') 

@@ -20,6 +20,7 @@ exports.leaderborad=async(req,res,next)=>{
                     attributes:[]
                 }
             ],
+            
 
             group:['id'],
             order:[[sequelize.col('total_cost'),"DESC"]]
